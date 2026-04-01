@@ -16,7 +16,19 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie01_StudenciZWarszawy()
     {
-        throw Niezaimplementowano(nameof(Zadanie01_StudenciZWarszawy));
+        var query = from s in DaneUczelni.Studenci
+            where s.Miasto.Equals("Warsaw")
+            select $"{ s.NumerIndeksu} , {s.Imie}, {s.Nazwisko}, {s.Miasto }";
+    
+        var query2 = from s in DaneUczelni.Studenci
+            where s.Miasto.Equals("Warsaw")
+            select new { s.NumerIndeksu , s.Imie, s.Nazwisko, s.Miasto };
+
+        var method = DaneUczelni.Studenci
+            .Where(s => s.Miasto.Equals("Warsaw"))
+            .Select(s => $"{s.NumerIndeksu}, {s.Imie}, {s.Nazwisko}, {s.Miasto}");
+
+        return query;
     }
 
     /// <summary>
@@ -30,7 +42,10 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie02_AdresyEmailStudentow()
     {
-        throw Niezaimplementowano(nameof(Zadanie02_AdresyEmailStudentow));
+        var method = DaneUczelni.Studenci
+            .Select(s => $"{s.Email}");
+
+        return method;
     }
 
     /// <summary>
@@ -45,7 +60,11 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie03_StudenciPosortowani()
     {
-        throw Niezaimplementowano(nameof(Zadanie03_StudenciPosortowani));
+        var method = DaneUczelni.Studenci
+            .OrderBy(s => $"{s.Nazwisko}, {s.Imie}")
+            .Select(s => $"{s.NumerIndeksu}, {s.Imie}, {s.Nazwisko}");
+
+        return method;
     }
 
     /// <summary>
@@ -60,7 +79,18 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie04_PierwszyPrzedmiotAnalityczny()
     {
-        throw Niezaimplementowano(nameof(Zadanie04_PierwszyPrzedmiotAnalityczny));
+        var method = DaneUczelni.Przedmioty
+            .Where(s => s.Kategoria.Equals("Analytics"))
+            .Select(s => $"{s.Nazwa}, {s.DataStartu}")
+            .FirstOrDefault();
+
+        if (method == null)
+        {
+            Console.WriteLine("Nie ma takiego przedmiotu");
+            return Enumerable.Empty<string>();
+        }
+
+        return new[] { method };
     }
 
     /// <summary>
