@@ -273,7 +273,14 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie13_GrupowanieZapisowWedlugPrzedmiotu()
     {
-        throw Niezaimplementowano(nameof(Zadanie13_GrupowanieZapisowWedlugPrzedmiotu));
+        var method =
+            from z in DaneUczelni.Zapisy
+            join p in DaneUczelni.Przedmioty
+                on z.PrzedmiotId equals p.Id
+            group p by p.Nazwa into g
+            select $"{g.Key}, {g.Count()}";
+
+        return method;
     }
 
     /// <summary>
@@ -290,7 +297,16 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie14_SredniaOcenaNaPrzedmiot()
     {
-        throw Niezaimplementowano(nameof(Zadanie14_SredniaOcenaNaPrzedmiot));
+        var method =
+            from z in DaneUczelni.Zapisy
+            join p in DaneUczelni.Przedmioty
+                on z.PrzedmiotId equals p.Id
+            where z.OcenaKoncowa != null
+            group z by p.Nazwa
+            into g
+            select $"{g.Key}, {g.Average(z => z.OcenaKoncowa)}";
+
+        return method;
     }
 
     /// <summary>
@@ -306,7 +322,13 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie15_ProwadzacyILiczbaPrzedmiotow()
     {
-        throw Niezaimplementowano(nameof(Zadanie15_ProwadzacyILiczbaPrzedmiotow));
+        var method =
+            from pr in DaneUczelni.Prowadzacy
+            join p in DaneUczelni.Przedmioty
+                on pr.Id equals p.ProwadzacyId into grupa
+            select $"{pr.Imie} {pr.Nazwisko}, {grupa.Count()}";
+
+        return method;
     }
 
     /// <summary>
@@ -323,7 +345,15 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie16_NajwyzszaOcenaKazdegoStudenta()
     {
-        throw Niezaimplementowano(nameof(Zadanie16_NajwyzszaOcenaKazdegoStudenta));
+        var method =
+            from s in DaneUczelni.Studenci
+            join z in DaneUczelni.Zapisy
+                on s.Id equals z.StudentId
+            where z.OcenaKoncowa != null
+            group z by $"{s.Imie} {s.Nazwisko}" into g
+            select $"{g.Key}, {g.Max(z => z.OcenaKoncowa)}";
+
+        return method;
     }
 
     /// <summary>
